@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Command</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #333;
+            color: #eee;
+            padding: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ping Command</h1>
+    <form id="ping-form">
+        <input type="text" id="host" name="host" placeholder="Enter IP or Hostname" required>
+        <button type="submit">Ping</button>
+    </form>
+
+    <h2>Ping Results</h2>
+    <pre id="result">Waiting for a ping...</pre>
+
+    <script>
+        document.getElementById('ping-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const host = document.getElementById('host').value;
+            const resultElement = document.getElementById('result');
+
+            fetch(`/ping?host=${encodeURIComponent(host)}`)
+                .then(response => response.text())
+                .then(data => {
+                    resultElement.textContent = data;
+                })
+                .catch(error => {
+                    resultElement.textContent = `Error: ${error.message}`;
+                });
+        });
+    </script>
+
+</body>
+</html>
